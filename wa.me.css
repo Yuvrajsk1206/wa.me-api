@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp API Generator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f4f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #444;
+        }
+
+        .container {
+            background: linear-gradient(145deg, #36d1dc, #5b86e5);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            max-width: 450px;
+            width: 100%;
+            color: #fff;
+            text-align: center;
+        }
+
+        .container h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            margin-top: 5px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #4caf50;
+        }
+
+        .form-group button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #25d366;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .form-group button:hover {
+            background-color: #1ebe57;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fff;
+            color: #444;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            position: relative;
+            text-align: left;
+        }
+
+        .result a {
+            color: #007bff;
+            text-decoration: none;
+            word-wrap: break-word;
+        }
+
+        .result a:hover {
+            text-decoration: underline;
+        }
+
+        .result button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 6px 12px;
+            font-size: 14px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .result button:hover {
+            background-color: #0056b3;
+        }
+
+        footer {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+        }
+
+        footer img {
+            width: 18px;
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+
+        .credits {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+        }
+
+        .credits img {
+            width: 18px;
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>WhatsApp API Generator</h1>
+        <form id="apiForm">
+            <div class="form-group">
+                <label for="phoneNumber">Phone Number:</label>
+                <input type="tel" id="phoneNumber" placeholder="Enter phone number (with country code)" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Message:</label>
+                <input type="text" id="message" placeholder="Enter your message" required>
+            </div>
+            <div class="form-group">
+                <label for="spaceOption">Space Encoding:</label>
+                <select id="spaceOption">
+                    <option value="%20">Replace spaces with %20</option>
+                    <option value="plain">Keep plain spaces</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button type="button" id="generateButton">Generate Link</button>
+            </div>
+        </form>
+        <div id="result" class="result" style="display: none;">
+            <strong>Generated Link:</strong> <span id="apiLink"></span>
+            <button id="copyButton">Copy</button>
+        </div>
+    </div>
+    <div class="credits">
+        Designed and developed by <strong>Yuvraj Shivanshu</strong> in India 
+        <img src="https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg" alt="Indian Flag">
+    </div>
+    <footer>
+        © 2025 WhatsApp API Generator. All rights reserved.
+    </footer>
+    <script>
+        document.getElementById('generateButton').addEventListener('click', function () {
+            const phoneNumber = document.getElementById('phoneNumber').value.trim();
+            const message = document.getElementById('message').value.trim();
+            const spaceOption = document.getElementById('spaceOption').value;
+
+            if (phoneNumber && message) {
+                const encodedMessage = spaceOption === "%20"
+                    ? encodeURIComponent(message).replace(/%20/g, ' ')
+                    : encodeURIComponent(message);
+                const apiLink = `https://api.whatsapp.com/send/?phone=${phoneNumber}&text=${encodedMessage}`;
+
+                const resultDiv = document.getElementById('result');
+                const apiLinkSpan = document.getElementById('apiLink');
+                apiLinkSpan.innerHTML = `<a href="${apiLink}" target="_blank">${apiLink}</a>`;
+                resultDiv.style.display = "block";
+
+                document.getElementById('copyButton').onclick = function () {
+                    navigator.clipboard.writeText(apiLink).then(() => {
+                        alert("Link copied to clipboard!");
+                    }).catch(() => {
+                        alert("Failed to copy the link.");
+                    });
+                };
+            } else {
+                alert("Please fill in both fields.");
+            }
+        });
+    </script>
+</body>
+</html>
