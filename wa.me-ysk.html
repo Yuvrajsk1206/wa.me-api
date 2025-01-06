@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp API Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #eaf7f9;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+        .container {
+            background: linear-gradient(135deg, #56ccf2, #2f80ed);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 100%;
+            color: #fff;
+        }
+        .container h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            color: #333;
+        }
+        .form-group button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #25d366;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        .form-group button:hover {
+            background-color: #1ebe57;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background: #fff;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            word-wrap: break-word;
+            position: relative;
+        }
+        .result button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            font-size: 14px;
+            background-color: #56ccf2;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .result button:hover {
+            background-color: #2f80ed;
+        }
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+        }
+        footer img {
+            width: 20px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>WhatsApp API Generator</h1>
+        <form id="apiForm">
+            <div class="form-group">
+                <label for="phoneNumber">Phone Number:</label>
+                <input type="tel" id="phoneNumber" placeholder="Enter phone number (with country code)" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Message:</label>
+                <input type="text" id="message" placeholder="Enter your message" required>
+            </div>
+            <div class="form-group">
+                <label for="spaceOption">Space Encoding:</label>
+                <select id="spaceOption">
+                    <option value="%20">Replace spaces with %20</option>
+                    <option value="plain">Keep plain spaces</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button type="button" id="generateButton">Generate Link</button>
+            </div>
+        </form>
+        <div id="result" class="result" style="display: none;">
+            <strong>Generated Link:</strong> <span id="apiLink"></span>
+            <button id="copyButton">Copy</button>
+        </div>
+    </div>
+    <footer>Proudly designed and developed by <strong>Yuvraj Shivanshu</strong> in India <img src="https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg" alt="Indian Flag">
+    </footer>
+    <script>
+        document.getElementById('generateButton').addEventListener('click', function () {
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const message = document.getElementById('message').value;
+            const spaceOption = document.getElementById('spaceOption').value;
+
+            if (phoneNumber && message) {
+                const encodedMessage = spaceOption === '%20' 
+                    ? encodeURIComponent(message).replace(/%20/g, ' ') 
+                    : encodeURIComponent(message);
+                const apiLink = `https://api.whatsapp.com/send/?phone=${phoneNumber}&text=${encodedMessage}`;
+
+                const resultDiv = document.getElementById('result');
+                const apiLinkSpan = document.getElementById('apiLink');
+                apiLinkSpan.innerHTML = `<a href="${apiLink}" target="_blank">${apiLink}</a>`;
+                resultDiv.style.display = 'block';
+
+                document.getElementById('copyButton').onclick = function () {
+                    navigator.clipboard.writeText(apiLink).then(() => {
+                        alert('Link copied to clipboard!');
+                    }).catch(err => {
+                        alert('Failed to copy link.');
+                    });
+                };
+            } else {
+                alert('Please fill in both fields.');
+            }
+        });
+    </script>
+</body>
+</html>
+
